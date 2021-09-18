@@ -1,7 +1,7 @@
 # Aero Lite
 This script will enable/disable hidden **Aero Lite** theme on **Windows 8/8.1/10** (Admin Privileges required)
 
-Verified to work with "**Windows 8 Pro (2012)**". Might not work with **Windows 8.1/10**
+Verified to work with "**Windows 8 Pro (2012)** & **Windows 8.1 Pro**". Might not work with **Windows 10**
 
 # Preview of Aero Lite
 
