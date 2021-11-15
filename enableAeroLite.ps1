@@ -1,13 +1,9 @@
-$ErrorActionPreference = 'SilentlyContinue'
-$wshell = New-Object -ComObject Wscript.Shell
-$Button = [System.Windows.MessageBoxButton]::YesNoCancel
-$ErrorIco = [System.Windows.MessageBoxImage]::Error
 If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
 	Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
 	Exit
 }
-cls
-$ThemeFolder = "C:\Windows\Resources\Themes"
+Clear-Host
+$ThemeFolder = "$env:SystemRoot\Resources\Themes"
 $Context = "; Copyright © Microsoft Corp.
 
 [Theme]
@@ -72,11 +68,33 @@ MTSM=RJSPBS
 [Sounds]
 ; IDS_SCHEME_DEFAULT
 SchemeName=@%SystemRoot%\System32\mmres.dll,-800
-
 "
 
+if(Test-Path "$ThemeFolder\aerolite8.theme"){
+    Clear-Host 
+    $Answer = Read-Host "Hey! You already have Aero Lite theme file... Do you want to run it?
+                         [ Y | N ]"
+    switch($Answer){
+        "y"{
+            Start-Process -FilePath "$ThemeFolder\aerolite8.theme" -WindowStyle Hidden -ErrorAction SilentlyContinue | Out-Null
+            Start-Sleep -Milliseconds 500
+            Exit-PSSession
+            Return;
+        }
+
+        "n"{
+            Exit-PSSession
+            Return;
+        }
+    }
+}
+
 New-Item -Path "$ThemeFolder\aerolite8.theme" -ItemType File | Out-Null
-Set-Content -Path "$ThemeFolder\aerolite8.theme" $Context | Out-Null
 Start-Sleep -Milliseconds 500
-Start-Process -FilePath "$ThemeFolder\aerolite8.theme" | Out-Null
-exit
+if(!(Test-Path "$ThemeFolder\aerolite8.theme")){
+    Write-Host "Hey! Script can't make Aero Lite file!" -ForegroundColor Red
+    Return;
+}
+Set-Content -Path "$ThemeFolder\aerolite8.theme" $Context
+Start-Process -FilePath "$ThemeFolder\aerolite8.theme" -WindowStyle Hidden -Wait -ErrorAction SilentlyContinue | Out-Null
+Exit-PSSession
